@@ -1,7 +1,6 @@
 backend/.env
 .idea/
 dataset
-backend/services/examples
 *.pyc
 venv
 postgres-data
