@@ -1,16 +1,19 @@
+import base64
+
 import cv2
 import numpy as np
 import face_recognition
+from skimage import io
 
-from models.model import FacialEmotionModel
+from services.models.model import FacialEmotionModel
 
-facec = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-model = FacialEmotionModel('../models/model_0_2.json', '../models/model_0_2.h5')
+facec = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+model = FacialEmotionModel('backend/services/models/model.json', 'backend/services/models/model.h5')
 font = cv2.FONT_HERSHEY_SIMPLEX
 
 
-def get_faces_emotions(path, mode='openCV'):
-    fr = cv2.imread(path)
+def get_faces_emotions(path, mode='face_recognition'):
+    fr = io.imread(path)
     gray_fr = cv2.cvtColor(fr, cv2.COLOR_BGR2GRAY)
 
     if mode == 'openCV':
@@ -27,14 +30,14 @@ def get_faces_emotions(path, mode='openCV'):
 
         pred = model.predict_emotion(roi[np.newaxis, :, :, np.newaxis])
 
-        cv2.putText(fr, pred, (x, y), font, 1, (255, 255, 0), 2)
+        cv2.putText(fr, pred, (x, y), font, 1, (255, 255, 0), 1)
         cv2.rectangle(fr, (x, y), (x + w, y + h), (255, 0, 0), 2)
 
+    fr = cv2.cvtColor(fr, cv2.COLOR_RGB2BGR)
+
     _, jpeg = cv2.imencode('.jpg', fr)
-    cv2.imshow('result', fr)
-    cv2.waitKey(0)
 
     byte_encode = jpeg.tobytes()
-    return byte_encode
+    b64_encode = base64.b64encode(byte_encode).decode('utf-8')
 
-get_faces_emotions('../examples/img_11.png', mode='face_recognition')
+    return b64_encode
