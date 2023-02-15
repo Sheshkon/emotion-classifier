@@ -4,3 +4,4 @@ dataset
 *.pyc
 venv
 postgres-data
+backend/sent_emails
