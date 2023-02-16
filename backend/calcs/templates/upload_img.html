@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Emotions{% endblock %}
+
+{% block content %}
+<form enctype="multipart/form-data" method="POST" action="">
+{% csrf_token %}
+{{ form.as_p }}
+<input type="submit" value="Upload"/>
+</form>
+
+<br><br>
+{% if input %}
+<p>input</p>
+<img src="{{ input }}">
+{% endif %}
+{% if output %}
+<p>result</p>
+<img src="{{ output }}">
+<br><br>
+<a href="{{ output }}" download> download</a>
+{% endif %}
+{% endblock %}
