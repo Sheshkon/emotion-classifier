@@ -9,7 +9,7 @@ from accounts.models import Profile
 
 class UserCreationForm(UserCreationForm):
     email = forms.EmailField(label=_("Email address"), required=True,
-                       help_text=_("Required."))
+                             help_text=_("Required."))
 
     class Meta:
         model = User
