@@ -5,3 +5,8 @@ dataset
 venv
 postgres-data
 backend/sent_emails
+
+backend/media/*
+!backend/media/profile_images
+backend/media/profile_images/*
+!backend/media/profile_images/default.jpg
