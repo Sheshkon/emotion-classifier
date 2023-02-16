@@ -1,14 +1,17 @@
 import base64
 
+from django.conf import settings
+
 import cv2
 import numpy as np
 import face_recognition
 from skimage import io
 
+
 from services.models.model import FacialEmotionModel
 
 facec = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-model = FacialEmotionModel('backend/services/models/model.json', 'backend/services/models/model.h5')
+model = FacialEmotionModel(settings.SERVICES_ROOT + '/models/model.json', settings.SERVICES_ROOT + '/models/model.h5')
 font = cv2.FONT_HERSHEY_SIMPLEX
 
 

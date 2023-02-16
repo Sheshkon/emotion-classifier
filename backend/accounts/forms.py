@@ -1,14 +1,14 @@
 from django.core.exceptions import ValidationError
-from django.forms import EmailField
-
+from django import forms
 from django.utils.translation import gettext_lazy as _
-
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, PasswordResetForm
 
+from accounts.models import Profile
+
 
 class UserCreationForm(UserCreationForm):
-    email = EmailField(label=_("Email address"), required=True,
+    email = forms.EmailField(label=_("Email address"), required=True,
                        help_text=_("Required."))
 
     class Meta:
@@ -21,6 +21,27 @@ class UserCreationForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+
+class UpdateUserForm(forms.ModelForm):
+    username = forms.CharField(max_length=100,
+                               required=True,
+                               widget=forms.TextInput(attrs={'class': 'form-control'}))
+    email = forms.EmailField(required=True,
+                             widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+    class Meta:
+        model = User
+        fields = ['username', 'email']
+
+
+class UpdateProfileForm(forms.ModelForm):
+    avatar = forms.ImageField(widget=forms.FileInput(attrs={'class': 'form-control-file'}))
+    bio = forms.CharField(required=False, widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 5}))
+
+    class Meta:
+        model = Profile
+        fields = ['avatar', 'bio']
 
 
 class PasswordResetForm(PasswordResetForm):

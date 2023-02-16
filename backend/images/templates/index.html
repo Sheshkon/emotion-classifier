@@ -3,11 +3,6 @@
 {% block title %}Emotions{% endblock %}
 
 {% block content %}
-{% if user.is_authenticated %}
-   <img src="data:image/png;base64,{{ image }}">
-{% else %}
-  <p>You are not logged in</p>
-  <a href="{% url 'login' %}">Log In</a>
-{% endif %}
+<img src="data:image/png;base64,{{ image }}">
 {% endblock %}
 
