@@ -22,3 +22,5 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_USER}
       - POSTGRES_NAME=${POSTGRES_NAME}
+    ports:
+      - "5433:5432"

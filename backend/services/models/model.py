@@ -3,7 +3,7 @@ from keras.models import model_from_json
 
 class FacialEmotionModel:
 
-    EMOTIONS = ("angry", "disgust", "fear", "happy", "sad", "surprise", "neutral")
+    EMOTIONS = ("Angry", "Disgust", "Fear", "Happy", "Sad", "Surprise", "Neutral")
 
     def __init__(self, model_json_file, model_weights_file):
         json_file = open(model_json_file, 'r')
