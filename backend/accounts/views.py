@@ -6,6 +6,7 @@ from django.contrib.auth.views import PasswordResetView, LoginView, PasswordRese
 from django.contrib.auth.decorators import login_required
 
 from accounts.forms import UserCreationForm, PasswordResetForm, UpdateUserForm, UpdateProfileForm
+from calcs.models import ImageClassifier
 
 
 class SignUpView(generic.CreateView):
@@ -47,5 +48,7 @@ def profile(request):
     else:
         user_form = UpdateUserForm(instance=request.user)
         profile_form = UpdateProfileForm(instance=request.user.profile)
+        calcs_image_count = ImageClassifier.objects.filter(profile_id=request.user.profile).count()
 
-    return render(request, 'accounts/profile.html', {'user_form': user_form, 'profile_form': profile_form})
+    return render(request, 'accounts/profile.html',
+                  {'user_form': user_form, 'profile_form': profile_form, 'calcs_image_count': calcs_image_count})
