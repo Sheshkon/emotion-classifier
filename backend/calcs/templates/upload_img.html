@@ -18,6 +18,16 @@
 <p>result</p>
 <img src="{{ output }}">
 <br><br>
-<a href="{{ output }}" download> download</a>
+<div>
+    jpg
+    <a href="{{ output }}" download> download Image</a>
+</div>
+
+{% endif %}
+{% if info %}
+<div>
+    json
+    <a href="data:text/json;charset=utf-8,{{ info}}" download="data.json">download JSON</a>
+</div>
 {% endif %}
 {% endblock %}

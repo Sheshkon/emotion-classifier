@@ -1,4 +1,5 @@
 import base64
+import json
 
 from django.conf import settings
 import cv2
@@ -30,21 +31,27 @@ def get_faces_emotions(path, mode='face_recognition'):
         text_y = (fr.shape[0] + text_size[1]) // 2
         put_text(fr, text_x, text_y, text)
 
+    info = {
+        'detected_faces': len(faces),
+        'image': None,
+        'faces': []
+    }
+
     for (x, y, w, h) in faces:
         fc = gray_fr[y:y + h, x:x + w]
         roi = cv2.resize(fc, (48, 48))
         roi = roi / 255.0
         pred = model.predict_emotion(roi[np.newaxis, :, :, np.newaxis])
-
+        info['faces'].append({'coords': {'x': x, 'y': y, 'w': w, 'h': h}, 'emotion': pred})
         put_text(fr, x, y, pred, scale_width=w)
         cv2.rectangle(fr, (x, y), (x + w, y + h), (0, 255, 0), 2)
-
     _, jpeg = cv2.imencode('.jpg', fr)
 
     byte_encode = jpeg.tobytes()
     b64_encode = base64.b64encode(byte_encode).decode('utf-8')
+    info['image'] = b64_encode
 
-    return b64_encode
+    return b64_encode, json.dumps(info, separators=(',', ':'))
 
 
 def put_text(fr, x, y, text, scale_width=None):
