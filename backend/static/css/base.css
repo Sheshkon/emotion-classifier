@@ -1,0 +1,19 @@
+html,
+body {
+    font-family: 'Alfa Slab One', cursive;
+    font-family: 'Lilita One', cursive;
+    font-family: 'Permanent Marker', cursive;
+
+    background-image: linear-gradient(to right, ghostwhite, lightgray, darkgray);
+    margin: 0;
+}
+
+#page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+#main {
+    flex: 1;
+}

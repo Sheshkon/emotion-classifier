@@ -1,5 +1,4 @@
 import base64
-import json
 
 from django.conf import settings
 import cv2
@@ -15,6 +14,8 @@ font = cv2.FONT_HERSHEY_COMPLEX
 
 def get_faces_emotions(path, mode='face_recognition'):
     fr = cv2.imread(path)
+    _, input_jpg = cv2.imencode('.jpg', fr)
+
     gray_fr = cv2.cvtColor(fr, cv2.COLOR_BGR2GRAY)
 
     if mode == 'openCV':
@@ -31,9 +32,10 @@ def get_faces_emotions(path, mode='face_recognition'):
         text_y = (fr.shape[0] + text_size[1]) // 2
         put_text(fr, text_x, text_y, text)
 
-    info = {
+    result = {
         'detected_faces': len(faces),
-        'image': None,
+        'input': None,
+        'output': None,
         'faces': []
     }
 
@@ -42,16 +44,23 @@ def get_faces_emotions(path, mode='face_recognition'):
         roi = cv2.resize(fc, (48, 48))
         roi = roi / 255.0
         pred = model.predict_emotion(roi[np.newaxis, :, :, np.newaxis])
-        info['faces'].append({'coords': {'x': x, 'y': y, 'w': w, 'h': h}, 'emotion': pred})
+        result['faces'].append({'coords': {'x': x, 'y': y, 'w': w, 'h': h}, 'emotion': pred})
         put_text(fr, x, y, pred, scale_width=w)
         cv2.rectangle(fr, (x, y), (x + w, y + h), (0, 255, 0), 2)
-    _, jpeg = cv2.imencode('.jpg', fr)
+    _, output_jpg = cv2.imencode('.jpg', fr)
 
-    byte_encode = jpeg.tobytes()
-    b64_encode = base64.b64encode(byte_encode).decode('utf-8')
-    info['image'] = b64_encode
+    input_b64 = image_to_b64(input_jpg)
+    output_b64 = image_to_b64(output_jpg)
 
-    return b64_encode, json.dumps(info, separators=(',', ':'))
+    result['input'] = input_b64
+    result['output'] = output_b64
+
+    return output_b64, result
+
+
+def image_to_b64(image):
+    byte_encode = image.tobytes()
+    return base64.b64encode(byte_encode).decode('utf-8')
 
 
 def put_text(fr, x, y, text, scale_width=None):

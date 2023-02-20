@@ -1,0 +1,29 @@
+
+input[type=file] {
+    margin: 0 auto;
+}
+
+.form-control-file{
+    position: relative;
+	text-align: center;
+	-moz-opacity:0 ;
+
+	z-index: 2;
+}
+
+#change-avatar {
+    display: flex;
+    cursor: pointer;
+    justify-content: center;
+}
+
+.profile-image {
+    display: inline-block;
+    border: 2px solid black;
+    border-radius: 100%;
+    width: 180px;
+    height: 180px;
+    background-position: center;
+    background-size: cover;
+}
+
