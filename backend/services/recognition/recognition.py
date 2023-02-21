@@ -14,8 +14,12 @@ font = cv2.FONT_HERSHEY_COMPLEX
 
 def get_faces_emotions(path, mode='face_recognition'):
     fr = cv2.imread(path)
-    _, input_jpg = cv2.imencode('.jpg', fr)
 
+    if fr.shape[1] < 500:
+        scale = int(1000 / fr.shape[1] * 100)
+        fr = scale_image(fr, scale)
+
+    _, input_jpg = cv2.imencode('.jpg', fr)
     gray_fr = cv2.cvtColor(fr, cv2.COLOR_BGR2GRAY)
 
     if mode == 'openCV':
@@ -47,8 +51,8 @@ def get_faces_emotions(path, mode='face_recognition'):
         result['faces'].append({'coords': {'x': x, 'y': y, 'w': w, 'h': h}, 'emotion': pred})
         put_text(fr, x, y, pred, scale_width=w)
         cv2.rectangle(fr, (x, y), (x + w, y + h), (0, 255, 0), 2)
-    _, output_jpg = cv2.imencode('.jpg', fr)
 
+    _, output_jpg = cv2.imencode('.jpg', fr)
     input_b64 = image_to_b64(input_jpg)
     output_b64 = image_to_b64(output_jpg)
 
@@ -64,12 +68,12 @@ def image_to_b64(image):
 
 
 def put_text(fr, x, y, text, scale_width=None):
-
     scale = 1
 
     if scale_width:
         scale = get_optimal_font_scale(text, scale_width)
         text_size = cv2.getTextSize(text, font, scale, 2)[0]
+
         x += (scale_width - text_size[0]) // 2
 
     text_size = cv2.getTextSize(text, font, scale, 2)[0]
@@ -78,7 +82,12 @@ def put_text(fr, x, y, text, scale_width=None):
     black_rect = np.ones(sub_fr.shape, dtype=np.uint8)
 
     res = cv2.addWeighted(sub_fr, 0.5, black_rect, 0.5, 1.0)
-    fr[y - text_size[1]: y, x: x + text_size[0]] = res
+
+    if y - text_size[1] <= 0:
+        y += text_size[1]
+
+    if res is not None:
+        fr[y - text_size[1]: y, x: x + text_size[0]] = res
 
     cv2.putText(fr, text, (x, y), font, scale, (255, 255, 255), 2)
 
@@ -87,6 +96,16 @@ def get_optimal_font_scale(text, width):
     for scale in reversed(range(0, 60, 1)):
         text_size = cv2.getTextSize(text, font, scale/10, 2)
         new_width = text_size[0][0]
-        if new_width <= width:
+        if new_width <= int(0.75 * width):
             return scale/10
     return 1
+
+
+def scale_image(image, scale_percent):
+    scale_percent = scale_percent  # percent of original size
+    width = int(image.shape[1] * scale_percent / 100)
+    height = int(image.shape[0] * scale_percent / 100)
+    dim = (width, height)
+
+    # resize image
+    return cv2.resize(image, dim, interpolation=cv2.INTER_AREA)
