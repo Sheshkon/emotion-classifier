@@ -2,6 +2,7 @@
 .idea/
 dataset
 *.pyc
+*.log
 venv
 postgres-data
 backend/sent_emails

@@ -1,3 +1,5 @@
+import logging
+
 from django.urls import reverse_lazy
 from django.views import generic
 from django.shortcuts import redirect, render
@@ -6,7 +8,10 @@ from django.contrib.auth.views import PasswordResetView, LoginView, PasswordRese
 from django.contrib.auth.decorators import login_required
 
 from accounts.forms import UserCreationForm, PasswordResetForm, UpdateUserForm, UpdateProfileForm
+from backend.views import base_view
 from calcs.models import ImageClassifier
+
+logger = logging.getLogger('main')
 
 
 class SignUpView(generic.CreateView):
@@ -33,16 +38,20 @@ class PasswordResetView(PasswordResetView):
     template_name = 'accounts/registration/password_reset_form.html'
 
 
+@base_view
 @login_required()
 def profile(request):
     if request.method == "POST":
+        logger.info(f'POST user_id: {request.user.id}')
         user_form = UpdateUserForm(request.POST, instance=request.user)
         profile_form = UpdateProfileForm(request.POST, request.FILES, instance=request.user.profile)
 
         if user_form.is_valid() and profile_form.is_valid():
+            logger.info(f'user_form and profile_form is valid')
             user_form.save()
             profile_form.save()
             messages.success(request, 'Your profile is updated successfully')
+            logger.info('profile is updated successfully')
             return redirect(to='accounts-profile')
 
     else:
