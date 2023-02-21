@@ -1,13 +1,14 @@
 import base64
 import logging
 
-from django.db import transaction
 from django.shortcuts import render
 from django.conf import settings
 from django.core.files.base import ContentFile
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView
 
-from backend.views import base_view
+from backend.views import base_view, BaseView
 from calcs.forms import ImageClassifierFrom
 from calcs.models import ImageClassifier
 from accounts.models import Profile
@@ -48,7 +49,17 @@ def upload_image(request):
             image_classifier.output.save('output.jpg', ContentFile(base64.b64decode(b64_encode)))
             output_file = image_classifier.output
 
-    return render(request, 'upload_img.html', {'form': form,
-                                               'input': input_file.url if input_file else None,
-                                               'output': output_file.url if output_file else None,
-                                               'info': info})
+    return render(request, 'calcs/upload_img.html', {'form': form,
+                                                     'input': input_file.url if input_file else None,
+                                                     'output': output_file.url if output_file else None,
+                                                     'info': info})
+
+
+class HistoryImageClassifier(BaseView, LoginRequiredMixin, ListView):
+    model = ImageClassifier
+    paginate_by = 5
+
+    def get_queryset(self, **kwargs):
+        return ImageClassifier.objects.filter(
+            profile__user_id=self.request.user.id
+        ).order_by('-date_time')
