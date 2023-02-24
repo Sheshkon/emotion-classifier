@@ -93,7 +93,6 @@ def image_to_b64(image):
 
 def from_b64_to_image(uri):
     encoded_data = uri.split(',')[1]
-    # print(encoded_data)
     data = base64.b64decode(encoded_data)
     np_arr = np.fromstring(data, np.uint8)
     img = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
