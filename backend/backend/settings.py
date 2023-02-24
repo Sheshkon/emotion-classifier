@@ -84,6 +84,8 @@ SERVICES_ROOT = os.path.join(BASE_DIR, 'services')
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -94,6 +96,8 @@ INSTALLED_APPS = [
     'accounts',
     'calcs'
 ]
+
+ASGI_APPLICATION = 'backend.asgi.application'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

@@ -1,0 +1,15 @@
+video {
+    display: none;
+}
+
+#frames-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 70vh
+}
+
+#frame {
+    height: auto;
+    width: 80vw
+}

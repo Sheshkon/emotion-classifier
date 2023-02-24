@@ -12,22 +12,19 @@ model = FacialEmotionModel(settings.SERVICES_ROOT + '/models/model.json', settin
 font = cv2.FONT_HERSHEY_COMPLEX
 
 
-def get_faces_emotions(path, mode='face_recognition'):
-    fr = cv2.imread(path)
+def get_faces_emotions(fr, mode='face_recognition', is_path=True):
+
+    if is_path:
+        fr = cv2.imread(fr)
 
     if fr.shape[1] < 500:
         scale = int(1000 / fr.shape[1] * 100)
         fr = scale_image(fr, scale)
 
-    _, input_jpg = cv2.imencode('.jpg', fr)
+    input_b64 = image_to_b64(fr)
     gray_fr = cv2.cvtColor(fr, cv2.COLOR_BGR2GRAY)
 
-    if mode == 'openCV':
-        faces = facec.detectMultiScale(gray_fr, 1.3, 5)
-
-    elif mode == 'face_recognition':
-        faces = face_recognition.face_locations(fr)
-        faces = [(face[3], face[0], face[1] - face[3], face[2] - face[0]) for face in faces]
+    faces = get_faces(fr, mode=mode)
 
     if not len(faces):
         text = 'no faces'
@@ -44,17 +41,12 @@ def get_faces_emotions(path, mode='face_recognition'):
     }
 
     for (x, y, w, h) in faces:
-        fc = gray_fr[y:y + h, x:x + w]
-        roi = cv2.resize(fc, (48, 48))
-        roi = roi / 255.0
-        pred = model.predict_emotion(roi[np.newaxis, :, :, np.newaxis])
+        pred = predict(gray_fr[y:y + h, x:x + w])
         result['faces'].append({'coords': {'x': x, 'y': y, 'w': w, 'h': h}, 'emotion': pred})
         put_text(fr, x, y, pred, scale_width=w)
         cv2.rectangle(fr, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
-    _, output_jpg = cv2.imencode('.jpg', fr)
-    input_b64 = image_to_b64(input_jpg)
-    output_b64 = image_to_b64(output_jpg)
+    output_b64 = image_to_b64(fr)
 
     result['input'] = input_b64
     result['output'] = output_b64
@@ -62,9 +54,49 @@ def get_faces_emotions(path, mode='face_recognition'):
     return output_b64, result
 
 
+def live_video_get_faces_emotions(fr, mode='face_recognition'):
+    gray_fr = cv2.cvtColor(fr, cv2.COLOR_BGR2GRAY)
+    faces = get_faces(fr, mode)
+
+    if not len(faces):
+        return None
+
+    result = []
+
+    for (x, y, w, h) in faces:
+        pred = predict(gray_fr[y:y + h, x:x + w])
+        result.append({'x': int(x), 'y': int(y), 'w': int(w), 'h': int(h), 'emotion': pred})
+
+    return result
+
+
+def get_faces(fr, mode):
+    if mode == 'openCV':
+        gray_fr = cv2.cvtColor(fr, cv2.COLOR_BGR2GRAY)
+        return facec.detectMultiScale(gray_fr, 1.3, 5)
+
+    faces = face_recognition.face_locations(fr)
+    return [(face[3], face[0], face[1] - face[3], face[2] - face[0]) for face in faces]
+
+
+def predict(fc):
+    roi = cv2.resize(fc, (48, 48))
+    roi = roi / 255.0
+    return model.predict_emotion(roi[np.newaxis, :, :, np.newaxis])
+
+
 def image_to_b64(image):
-    byte_encode = image.tobytes()
+    _, buffer = cv2.imencode('.jpg', image)
+    byte_encode = buffer.tobytes()
     return base64.b64encode(byte_encode).decode('utf-8')
+
+
+def from_b64_to_image(uri):
+    encoded_data = uri.split(',')[1]
+    data = base64.b64decode(encoded_data)
+    np_arr = np.fromstring(data, np.uint8)
+    img = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+    return img
 
 
 def put_text(fr, x, y, text, scale_width=None):
@@ -94,10 +126,10 @@ def put_text(fr, x, y, text, scale_width=None):
 
 def get_optimal_font_scale(text, width):
     for scale in reversed(range(0, 60, 1)):
-        text_size = cv2.getTextSize(text, font, scale/10, 2)
+        text_size = cv2.getTextSize(text, font, scale / 10, 2)
         new_width = text_size[0][0]
         if new_width <= int(0.75 * width):
-            return scale/10
+            return scale / 10
     return 1
 
 
