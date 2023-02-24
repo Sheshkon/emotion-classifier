@@ -1,28 +1,43 @@
 {% extends "base.html" %}
 
+{% load static %}
+
+{% block title %}History{% endblock %}
+
+{% block extrahead %}
+<link href="{% static '/css/imageclassifier_list.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
 <h2>Image Classifier history</h2>
-<ul>
-    {% for image_classifier in page_obj %}
-    <li>{{ image_classifier.date_time }}</li>
-    {% if image_classifier.description %}
-    <li>description: {{ image_classifier.description}}</li>
-    {% endif %}
-    <img src="{{ image_classifier.input.url }}" alt="input" width="45%">
 
-    {% if image_classifier.output %}
-    <img src="{{ image_classifier.output.url }}" alt="result" width="45%">
-    {% endif %}
+<div class="d-flex align-items-center justify-content-center">
 
-    {% if image_classifier.output_info %}
-    <div>
-        json
-        <a href="data:text/json;charset=utf-8,{{ image_classifier.output_info}}" download="data.json">download JSON</a>
+    <div class=".text-center p-3">
+        {% for image_classifier in page_obj %}
+        <div class="card m-4">
+            <div>{{ image_classifier.date_time }}</div>
+            {% if image_classifier.description %}
+            <div>description: {{ image_classifier.description}}</div>
+            {% endif %}
+            {% if image_classifier.output_info %}
+            <div>
+                json
+                <a href="data:text/json;charset=utf-8,{{ image_classifier.output_info}}" download="data.json">download
+                    JSON</a>
+            </div>
+            {% endif %}
+            <br>
+            <img src="{{ image_classifier.input.url }}" alt="input" width="45%" class="zoom">
+
+            {% if image_classifier.output %}
+            <img src="{{ image_classifier.output.url }}" alt="result" width="45%" class="zoom">
+            {% endif %}
+        </div>
+        <br><br>
+        {% endfor %}
     </div>
-    {% endif %}
-    <br><br>
-    {% endfor %}
-</ul>
+</div>
 
 
 <div class="pagination">
@@ -42,7 +57,6 @@
         {% endif %}
     </span>
 </div>
-
-
-
 {% endblock %}
+
+{% block extrascript %}{% endblock %}

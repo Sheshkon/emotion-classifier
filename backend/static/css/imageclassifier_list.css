@@ -1,0 +1,16 @@
+history-container {
+
+}
+
+.card {
+    background: #212121;
+    box-shadow: 15px 15px 30px rgb(25, 25, 25);
+    /*box-shadow: 20px 10px 10px rgb(25, 25, 25);*/
+    color: white;
+    display: inline-block;
+    padding: 20px;
+    /*border-top-left-radius: 20px;*/
+    border-top-right-radius: 20px;
+    width: 80vw;
+    font-size: smaller;
+}

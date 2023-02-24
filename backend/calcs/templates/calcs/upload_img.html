@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
 
 {% load static %}
+
 {% block title %}Classifier{% endblock title %}
+
 {% block extrahead %}
 <link href="{% static '/css/upload_img.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
-
 <h1>Emotion classifier</h1>
 <form enctype="multipart/form-data" method="POST" action="">
     {% csrf_token %}
@@ -18,7 +19,6 @@
 <div id="processing">
     <h3>Processing...</h3>
 </div>
-<script src="{% static 'js/upload_img.js' %}"></script>
 
 <br><br>
 <div>
@@ -34,14 +34,20 @@
 <br><br>
 <div>
     jpg
-    <a href="{{ output }}" download> download Image</a>
+    <a href="{{ output }}" download style="text-shadow: 1px 1px 2px red, 0 0 1em blue, 0 0 0.2em black;"> download Image</a>
 </div>
 
 {% endif %}
 {% if info %}
 <div>
     json
-    <a href="data:text/json;charset=utf-8,{{ info}}" download="data.json">download JSON</a>
+    <a href="data:text/json;charset=utf-8,{{ info}}" style="text-shadow: 1px 1px 2px red, 0 0 1em blue, 0 0 0.2em black;" download="data.json">download JSON</a>
 </div>
 {% endif %}
 {% endblock %}
+
+{% block extrascript %}
+<script src="{% static 'js/upload_img.js' %}"></script>
+{% endblock %}
+
+

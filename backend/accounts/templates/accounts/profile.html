@@ -1,13 +1,14 @@
 {% extends "base.html" %}
+
 {% load static %}
+
 {% block title %}Profile Page{% endblock title %}
+
 {% block extrahead %}
 <link href="{% static '/css/profile.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
-
-
 <h1>Edit Profile</h1>
 <hr>
 <div class="form-content">
@@ -16,11 +17,11 @@
             <!-- left column -->
             <div class="col-md-3 pe-5">
                 <div class="text-center">
-                    <div class="profile-image" style="background-image: url('{{user.profile.avatar.url}}')" ></div>
+                    <div class="profile-image zoom" style="background-image: url('{{user.profile.avatar.url}}')"></div>
                     <h6 class="small">Upload a different photo...</h6>
                     <div style="position: relative">
                         <label style="display:block; margin:auto;">
-                                {{ profile_form.avatar }}
+                            {{ profile_form.avatar }}
                         </label>
                     </div>
                 </div>
@@ -63,4 +64,7 @@
             </div>
         </div>
     </form>
-    {% endblock content %}
+</div>
+{% endblock content %}
+
+{% block extrascript %}{% endblock %}

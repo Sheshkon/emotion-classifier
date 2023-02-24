@@ -1,18 +1,14 @@
 {% extends 'base.html' %}
 
 {% load static %}
+
 {% block title %}Classifier{% endblock title %}
 
 {% block extrahead %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"
-        integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
 <link href="{% static 'css/live_camera.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
-
 <video autoplay></video>
 
 <div id="frames-container">
@@ -20,6 +16,8 @@
         <img id='frame' src="">
     </div>
 </div>
+{% endblock %}
 
+{% block extrascript %}
 <script src="{% static 'js/live_camera.js' %}"></script>
 {% endblock %}

@@ -57,7 +57,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['https://img-classifier.loca.lt']
+CSRF_TRUSTED_ORIGINS = ['https://img-classifier.loca.lt', 'https://5f94jf.tunnel.pyjam.as']
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 

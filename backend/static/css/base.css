@@ -4,8 +4,10 @@ body {
     font-family: 'Lilita One', cursive;
     font-family: 'Permanent Marker', cursive;
 
-    background-image: linear-gradient(to right, ghostwhite, lightgray, darkgray);
+    /*background-image: linear-gradient(to right, ghostwhite, lightgray, darkgray);*/
     margin: 0;
+    background: linear-gradient(111.7deg, rgb(251, 198, 6) 2.4%, rgb(224, 82, 95) 28.3%, rgb(194, 78, 154) 46.2%, rgb(32, 173, 190) 79.4%, rgb(22, 158, 95) 100.2%);
+
 }
 
 #page {
@@ -13,6 +15,10 @@ body {
     display: flex;
     flex-direction: column;
 }
+.zoom:hover{
+    transform: scale(1.2); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
+
 
 #main {
     flex: 1;
