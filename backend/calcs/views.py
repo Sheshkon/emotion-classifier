@@ -55,6 +55,12 @@ def upload_image(request):
                                                      'info': info})
 
 
+@base_view
+@login_required()
+def live_camera(request):
+    return render(request, 'calcs/live_camera.html')
+
+
 class HistoryImageClassifier(BaseView, LoginRequiredMixin, ListView):
     model = ImageClassifier
     paginate_by = 5
