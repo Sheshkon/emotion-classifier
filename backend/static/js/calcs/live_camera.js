@@ -1,6 +1,6 @@
 const video = document.querySelector('video')
 const img = document.getElementById('frame')
-const URL = `wss://${window.location.host}/wss/socket-server/`
+const URL = `ws://${window.location.host}/ws/socket-server/`
 const RECOGNITION_FPS = 2
 const CAMERA_FPS = 60
 const CameraSocket = new WebSocket(URL)
