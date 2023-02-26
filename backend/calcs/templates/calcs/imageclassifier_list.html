@@ -5,7 +5,7 @@
 {% block title %}History{% endblock %}
 
 {% block extrahead %}
-<link href="{% static '/css/imageclassifier_list.css' %}" rel="stylesheet">
+<link href="{% static '/css/calcs/imageclassifier_list.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -16,7 +16,15 @@
     <div class=".text-center p-3">
         {% for image_classifier in page_obj %}
         <div class="card m-4">
-            <div>{{ image_classifier.date_time }}</div>
+            <br>
+            <div class="images-container">
+            <img src="{{ image_classifier.input.url }}" alt="input" width="45%" class="zoom">
+
+            {% if image_classifier.output %}
+            <img src="{{ image_classifier.output.url }}" alt="result" width="45%" class="zoom">
+            {% endif %}
+                <br><br>
+              <div>{{ image_classifier.date_time }}</div>
             {% if image_classifier.description %}
             <div>description: {{ image_classifier.description}}</div>
             {% endif %}
@@ -27,12 +35,8 @@
                     JSON</a>
             </div>
             {% endif %}
-            <br>
-            <img src="{{ image_classifier.input.url }}" alt="input" width="45%" class="zoom">
+            </div>
 
-            {% if image_classifier.output %}
-            <img src="{{ image_classifier.output.url }}" alt="result" width="45%" class="zoom">
-            {% endif %}
         </div>
         <br><br>
         {% endfor %}

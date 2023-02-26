@@ -6,7 +6,7 @@
 {% block title %}Login{% endblock %}
 
 {% block extrahead %}
-<link href="{% static '/css/login.css' %}" rel="stylesheet">
+<link href="{% static '/css/accounts/login.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -20,11 +20,11 @@
         <form class="p-3 mt-3" method="post">
              {% csrf_token %}
             <div class="form-field d-flex align-items-center">
-                <span class="far fa-user"></span>
+               <span class="fa-solid fa-user"></span>
                 {{ form.username }}
             </div>
             <div class="form-field d-flex align-items-center">
-                <span class="fas fa-key"></span>
+                 <span class="fas fa-key"></span>
                 {{ form.password }}
             </div>
             <button class="btn mt-3">Login</button>
@@ -36,5 +36,5 @@
 {% endblock %}
 
 {% block extrascript %}
-<script src="{% static 'js/login.js' %}"></script>
+<script src="{% static 'js/accounts/login.js' %}"></script>
 {% endblock %}
