@@ -1,16 +1,64 @@
 <!-- templates/registration/signup.html -->
 {% extends "base.html" %}
 
+{% load static %}
+
 {% block title %}Sign Up{% endblock %}
 
+{% block extrahead %}
+<link href="{% static '/css/accounts/signup.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
-<h2>Sign up</h2>
-<div class="container">
-    <form method="post">
+
+<!--<div class="container">-->
+<!--    <form method="post">-->
+<!--        {% csrf_token %}-->
+<!--        {{ form.as_p }}-->
+<!--        <p>Already have an <a href="{% url 'login' %}">account</a>?</p>-->
+<!--        <button type="submit" class="btn btn-outline-dark">Sign Up</button>-->
+<!--    </form>-->
+<!--</div>-->
+
+<div class="wrapper">
+    <div class="logo">
+        <img src="{% static 'img/logo.png' %}" alt="">
+    </div>
+    <div class="text-center mt-4 name">
+        Sign up
+    </div>
+    <form class="p-3 mt-3" method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <p>Already have an <a href="{% url 'login' %}">account</a>?</p>
-        <button type="submit" class="btn btn-outline-dark">Sign Up</button>
+        {{ form.username.errors }}
+        <div class="form-field d-flex align-items-center">
+            <span class="fa-solid fa-user"></span>
+            {{ form.username }}
+        </div>
+{{ form.email.errors }}
+        <div class="form-field d-flex align-items-center">
+            <span class="fa-solid fa-envelope"></span>
+            {{ form.email }}
+        </div>
+        {{ form.password1.errors}}
+        <div class="form-field d-flex align-items-center">
+
+            <span class="fas fa-key"></span>
+            {{ form.password1 }}
+        </div>
+        {{ form.password2.errors}}
+        <div class="form-field d-flex align-items-center">
+            <span class="fas fa-key"></span>
+            {{ form.password2 }}
+        </div>
+
+        <button class="btn mt-3">Register</button>
     </form>
+    <div class="text-center fs-6">
+        <a href="{% url 'login' %}">Already have an account?</a>
+    </div>
 </div>
+{% endblock %}
+
+{% block extrascript %}
+<script src="{% static 'js/accounts/signup.js' %}"></script>
 {% endblock %}

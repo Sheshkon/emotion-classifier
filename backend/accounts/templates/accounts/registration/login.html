@@ -1,14 +1,40 @@
 <!-- templates/registration/login.html -->
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block title %}Login{% endblock %}
 
+{% block extrahead %}
+<link href="{% static '/css/accounts/login.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
-<h2>Login</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <p>Don't have an <a href="{% url 'signup' %}">account</a>?</p>
-  <button type="submit" class="btn btn-outline-dark">Sign In</button>
-</form>
+<div class="wrapper">
+        <div class="logo">
+            <img src="{% static 'img/logo.png' %}" alt="">
+        </div>
+        <div class="text-center mt-4 name">
+            Login
+        </div>
+        <form class="p-3 mt-3" method="post">
+             {% csrf_token %}
+            <div class="form-field d-flex align-items-center">
+               <span class="fa-solid fa-user"></span>
+                {{ form.username }}
+            </div>
+            <div class="form-field d-flex align-items-center">
+                 <span class="fas fa-key"></span>
+                {{ form.password }}
+            </div>
+            <button class="btn mt-3">Login</button>
+        </form>
+        <div class="text-center fs-6">
+            <a href="{% url 'password_reset' %}">Forgot password?</a> or <a href="{% url 'signup' %}">Sign up</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extrascript %}
+<script src="{% static 'js/accounts/login.js' %}"></script>
 {% endblock %}
